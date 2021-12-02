@@ -35,6 +35,7 @@ dependencies:
   percent_indicator: ^2.1.9
   provider: ^6.0.0
   pull_to_refresh: ^2.0.0
+  wakelock: ^0.5.6
 
 dev_dependencies:
   flutter_test:
@@ -72,6 +73,9 @@ flutter:
     - assets/images/cat.jpg
     - assets/images/gorilla.jpg
     - assets/images/monster.jpg
+    - assets/images/bell.png
+    - assets/images/among-us.jpeg
+    - assets/avatar.png
   # To add assets to your application, add an assets section, like this:
   # assets:
   #   - images/a_dot_burr.jpeg

@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-// import 'package:audioplayers/audioplayers.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -11,78 +10,43 @@ class MusicChange extends StatefulWidget {
 }
 
 class _MusicChangeState extends State<MusicChange> {
-  List<Color> _colors = <Color>[
-    Colors.white,
-    Colors.blue,
-    Colors.red,
-    Colors.black,
-    Colors.green
-  ];
   var url_music;
+  final player = AudioPlayer();
+  var position;
   @override
   void initState() {
     super.initState();
     getSound();
   }
 
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-  }
-
-  @override
-  void dispose() {
-    setState(() {});
-    super.dispose();
-  }
-
   getSound() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    setState(() {});
+
     setState(() {
       url_music = prefs.getString('url_sound');
-    });
-    print(url_music);
-  }
-
-  int _currentColorIndex = 0;
-
-  void _incrementColorIndex() {
-    setState(() {
-      if (_currentColorIndex < _colors.length - 1) {
-        _currentColorIndex++;
-      } else {
-        _currentColorIndex = 0;
-      }
+      position = prefs.getInt('index');
     });
   }
 
-  final player = AudioPlayer();
-  var position;
-
-  setSound(data) async {
+  setSound(data, index) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setString('url_sound', data);
-    setState(() {});
+    prefs.setInt('index', index);
   }
 
   @override
   Widget build(BuildContext context) {
-    setState(() {});
     return Scaffold(
       backgroundColor: Colors.grey[400],
       appBar: AppBar(
         backgroundColor: Colors.black,
         title: Text("Setting music"),
       ),
-      body: Column(
+      body: ListView(
         children: <Widget>[
           Card(
               //pembanding google drive
-              color: (url_music ==
-                      'https://drive.google.com/uc?export=view&id=13GxEiSMv_ss9C5a-70B8kdDPEjUuAGzf')
-                  ? Colors.red
-                  : Colors.white,
+              color: (position == 1) ? Colors.red : Colors.white,
               child: ListTile(
                 title: Text("Rooster"),
                 subtitle: Text("Rooster Sound Effect"),
@@ -104,25 +68,23 @@ class _MusicChangeState extends State<MusicChange> {
                           icon: Icon(Icons.play_arrow)),
                       IconButton(
                           onPressed: () async {
-                            setState(() {
-                              position = 1;
-                            });
-
-                            await setSound(
-                                'https://drive.google.com/uc?export=view&id=13GxEiSMv_ss9C5a-70B8kdDPEjUuAGzf');
                             setState(() {});
+                            setState(() {
+                              position = (position == 1) ? 0 : 1;
+                            });
+                            await setSound(
+                                'https://drive.google.com/uc?export=view&id=13GxEiSMv_ss9C5a-70B8kdDPEjUuAGzf',
+                                position);
                           },
                           color: Colors.green,
-                          icon: Icon(Icons.add))
+                          icon:
+                              Icon(position == 1 ? Icons.minimize : Icons.add))
                     ],
                   ),
                 ),
               )),
           Card(
-              color: (url_music ==
-                      'https://drive.google.com/uc?export=view&id=1x38u1aINm-rQrZSD-Fb6VsMRAtPjIPse')
-                  ? Colors.red
-                  : Colors.white,
+              color: (position == 2) ? Colors.red : Colors.white,
               child: ListTile(
                 title: Text("Cow"),
                 subtitle: Text("Cow Sound Effect"),
@@ -144,24 +106,23 @@ class _MusicChangeState extends State<MusicChange> {
                           icon: Icon(Icons.play_arrow)),
                       IconButton(
                           onPressed: () async {
+                            setState(() {});
                             setState(() {
-                              position = 2;
+                              position = (position == 2) ? 0 : 2;
                             });
                             await setSound(
-                                'https://drive.google.com/uc?export=view&id=1x38u1aINm-rQrZSD-Fb6VsMRAtPjIPse');
-                            setState(() {});
+                                'https://drive.google.com/uc?export=view&id=1x38u1aINm-rQrZSD-Fb6VsMRAtPjIPse',
+                                position);
                           },
                           color: Colors.green,
-                          icon: Icon(Icons.add))
+                          icon:
+                              Icon(position == 2 ? Icons.minimize : Icons.add))
                     ],
                   ),
                 ),
               )),
           Card(
-              color: (url_music ==
-                      'https://drive.google.com/uc?export=view&id=1MPSoQz4oOhRK0BAa2wvVTe3unZQSBfJL')
-                  ? Colors.red
-                  : Colors.white,
+              color: (position == 3) ? Colors.red : Colors.white,
               child: ListTile(
                 title: Text("Tiger"),
                 subtitle: Text("Tiger Sound Effect"),
@@ -183,24 +144,23 @@ class _MusicChangeState extends State<MusicChange> {
                           icon: Icon(Icons.play_arrow)),
                       IconButton(
                           onPressed: () async {
+                            setState(() {});
                             setState(() {
-                              position = 3;
+                              position = (position == 3) ? 0 : 3;
                             });
                             await setSound(
-                                'https://drive.google.com/uc?export=view&id=1MPSoQz4oOhRK0BAa2wvVTe3unZQSBfJL');
-                            setState(() {});
+                                'https://drive.google.com/uc?export=view&id=1MPSoQz4oOhRK0BAa2wvVTe3unZQSBfJL',
+                                position);
                           },
                           color: Colors.green,
-                          icon: Icon(Icons.add))
+                          icon:
+                              Icon(position == 3 ? Icons.minimize : Icons.add))
                     ],
                   ),
                 ),
               )),
           Card(
-              color: (url_music ==
-                      'https://drive.google.com/uc?export=view&id=1vhgHylgbPjSUySK0_cyixK8Anidpl26K')
-                  ? Colors.red
-                  : Colors.white,
+              color: (position == 4) ? Colors.red : Colors.white,
               child: ListTile(
                 title: Text("Explosion"),
                 subtitle: Text("Explosion Sound Effect"),
@@ -222,24 +182,23 @@ class _MusicChangeState extends State<MusicChange> {
                           icon: Icon(Icons.play_arrow)),
                       IconButton(
                           onPressed: () async {
+                            setState(() {});
                             setState(() {
-                              position = 4;
+                              position = (position == 4) ? 0 : 4;
                             });
                             await setSound(
-                                'https://drive.google.com/uc?export=view&id=1vhgHylgbPjSUySK0_cyixK8Anidpl26K');
-                            setState(() {});
+                                'https://drive.google.com/uc?export=view&id=1vhgHylgbPjSUySK0_cyixK8Anidpl26K',
+                                position);
                           },
                           color: Colors.green,
-                          icon: Icon(Icons.add))
+                          icon:
+                              Icon(position == 4 ? Icons.minimize : Icons.add))
                     ],
                   ),
                 ),
               )),
           Card(
-              color: (url_music ==
-                      'https://drive.google.com/uc?export=view&id=1VJ9w1xLFufKKBrboiTIMsD8QWoEH20Hf')
-                  ? Colors.red
-                  : Colors.white,
+              color: (position == 5) ? Colors.red : Colors.white,
               child: ListTile(
                 title: Text("Cat"),
                 subtitle: Text("Cat Sound Effect"),
@@ -261,24 +220,23 @@ class _MusicChangeState extends State<MusicChange> {
                           icon: Icon(Icons.play_arrow)),
                       IconButton(
                           onPressed: () async {
+                            setState(() {});
                             setState(() {
-                              position = 5;
+                              position = (position == 5) ? 0 : 5;
                             });
                             await setSound(
-                                'https://drive.google.com/uc?export=view&id=1VJ9w1xLFufKKBrboiTIMsD8QWoEH20Hf');
-                            setState(() {});
+                                'https://drive.google.com/uc?export=view&id=1VJ9w1xLFufKKBrboiTIMsD8QWoEH20Hf',
+                                position);
                           },
                           color: Colors.green,
-                          icon: Icon(Icons.add))
+                          icon:
+                              Icon(position == 5 ? Icons.minimize : Icons.add))
                     ],
                   ),
                 ),
               )),
           Card(
-              color: (url_music ==
-                      'https://drive.google.com/uc?export=view&id=12-0aJM7lbXPRTMUPrIZluaJJNHKG7spu')
-                  ? Colors.red
-                  : Colors.white,
+              color: (position == 6) ? Colors.red : Colors.white,
               child: ListTile(
                 title: Text("Gorilla"),
                 subtitle: Text("Gorila Sound effect"),
@@ -300,24 +258,23 @@ class _MusicChangeState extends State<MusicChange> {
                           icon: Icon(Icons.play_arrow)),
                       IconButton(
                           onPressed: () async {
+                            setState(() {});
                             setState(() {
-                              position = 6;
+                              position = (position == 6) ? 0 : 6;
                             });
                             await setSound(
-                                'https://drive.google.com/uc?export=view&id=12-0aJM7lbXPRTMUPrIZluaJJNHKG7spu');
-                            setState(() {});
+                                'https://drive.google.com/uc?export=view&id=12-0aJM7lbXPRTMUPrIZluaJJNHKG7spu',
+                                position);
                           },
                           color: Colors.green,
-                          icon: Icon(Icons.add))
+                          icon:
+                              Icon(position == 6 ? Icons.minimize : Icons.add))
                     ],
                   ),
                 ),
               )),
           Card(
-              color: (url_music ==
-                      'https://drive.google.com/uc?export=view&id=1ThE1zGu9eMKhRB4YJWmTPpJSTfjFqeLi')
-                  ? Colors.red
-                  : Colors.white,
+              color: (position == 7) ? Colors.red : Colors.white,
               child: ListTile(
                 title: Text("Monster"),
                 onLongPress: () {},
@@ -340,15 +297,95 @@ class _MusicChangeState extends State<MusicChange> {
                           icon: Icon(Icons.play_arrow)),
                       IconButton(
                           onPressed: () async {
+                            setState(() {});
                             setState(() {
-                              position = 7;
+                              position = (position == 7) ? 0 : 7;
                             });
                             await setSound(
-                                'https://drive.google.com/uc?export=view&id=1ThE1zGu9eMKhRB4YJWmTPpJSTfjFqeLi');
-                            setState(() {});
+                                'https://drive.google.com/uc?export=view&id=1ThE1zGu9eMKhRB4YJWmTPpJSTfjFqeLi',
+                                position);
                           },
                           color: Colors.green,
-                          icon: Icon(Icons.add))
+                          icon:
+                              Icon(position == 7 ? Icons.minimize : Icons.add))
+                    ],
+                  ),
+                ),
+              )),
+          Card(
+              color: (position == 8) ? Colors.red : Colors.white,
+              child: ListTile(
+                title: Text("Bell"),
+                onLongPress: () {},
+                subtitle: Text("Bell sound effect"),
+                leading: CircleAvatar(
+                  backgroundImage: AssetImage('assets/images/bell.png'),
+                ),
+                trailing: Container(
+                  width: 100,
+                  child: Row(
+                    children: <Widget>[
+                      IconButton(
+                          onPressed: () async {
+                            await player.setUrl(
+                                'https://drive.google.com/uc?export=view&id=1oJzPy7vkgkV8PoXEsKFzp84qFVUE26GT');
+
+                            player.play();
+                          },
+                          color: Colors.blue,
+                          icon: Icon(Icons.play_arrow)),
+                      IconButton(
+                          onPressed: () async {
+                            setState(() {});
+                            setState(() {
+                              position = (position == 8) ? 0 : 8;
+                            });
+                            await setSound(
+                                'https://drive.google.com/uc?export=view&id=1oJzPy7vkgkV8PoXEsKFzp84qFVUE26GT',
+                                position);
+                          },
+                          color: Colors.green,
+                          icon:
+                              Icon(position == 8 ? Icons.minimize : Icons.add))
+                    ],
+                  ),
+                ),
+              )),
+          Card(
+              color: (position == 9) ? Colors.red : Colors.white,
+              child: ListTile(
+                title: Text("Game"),
+                onLongPress: () {},
+                subtitle: Text("Game Sound Effect"),
+                leading: CircleAvatar(
+                  backgroundImage: AssetImage('assets/images/among-us.jpeg'),
+                ),
+                trailing: Container(
+                  width: 100,
+                  child: Row(
+                    children: <Widget>[
+                      IconButton(
+                          onPressed: () async {
+                            await player.setUrl(
+                                'https://drive.google.com/uc?export=view&id=1kqHySpE8G_mKkjrlaH-xHykp4vZM0IDy');
+
+                            player.play();
+                          },
+                          color: Colors.blue,
+                          icon: Icon(Icons.play_arrow)),
+                      IconButton(
+                          onPressed: () async {
+                            setState(() {});
+                            setState(() {
+                              position = (position == 9) ? 0 : 9;
+                            });
+                            await setSound(
+                                'https://drive.google.com/uc?export=view&id=1kqHySpE8G_mKkjrlaH-xHykp4vZM0IDy',
+                                position);
+                          },
+                          color: Colors.green,
+                          icon:
+                              Icon(position == 9 ? Icons.minimize : Icons.add))
                     ],
                   ),
                 ),
@@ -356,5 +393,15 @@ class _MusicChangeState extends State<MusicChange> {
         ],
       ),
     );
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
   }
 }

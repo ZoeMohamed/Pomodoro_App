@@ -3,7 +3,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:timer/main.dart';
-import 'package:timer/music.dart';
+import 'package:timer/screens/music.dart';
+import 'package:timer/widget/linear_wiget.dart';
 import 'package:timer/utils/constants.dart';
 import 'package:timer/widget/progress_icons.dart';
 import 'package:timer/widget/custom_button.dart';
@@ -12,6 +13,7 @@ import 'dart:async';
 import 'package:just_audio/just_audio.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:wakelock/wakelock.dart';
 
 class Home extends StatefulWidget {
   @override
@@ -26,7 +28,6 @@ const _btnTextStartLongBreak = "TAKE A LONG BREAK";
 const _btnTextStartNewSet = "START NEW SET";
 const _btnTextPause = "PAUSE";
 const _btnTextReset = "RESET";
-int _page = 0;
 GlobalKey<CurvedNavigationBarState> _bottomNavigationKey = GlobalKey();
 
 class _HomeState extends State<Home> {
@@ -45,7 +46,6 @@ class _HomeState extends State<Home> {
       url_music = prefs.getString('url_sound') ??
           'https://drive.google.com/uc?export=view&id=13GxEiSMv_ss9C5a-70B8kdDPEjUuAGzf';
     });
-    print(url_music);
   }
 
   AudioPlayer player;
@@ -62,46 +62,11 @@ class _HomeState extends State<Home> {
     super.dispose();
   }
 
-  static const List<Widget> _pages = <Widget>[
-    Icon(
-      Icons.music_note,
-      size: 1,
-    ),
-    Icon(
-      Icons.home,
-      size: 1,
-    ),
-  ];
-  int _selectedIndex = 0;
-
   @override
   Widget build(BuildContext context) {
     setState(() {});
     return Scaffold(
         backgroundColor: Colors.grey[900],
-
-        // bottomNavigationBar: BottomNavigationBar(
-        //   backgroundColor: Colors.white10,
-        //   showSelectedLabels: false,
-        //   showUnselectedLabels: false,
-        //   elevation: 0,
-        //   selectedFontSize: 9,
-        //   selectedIconTheme: IconThemeData(color: Colors.amberAccent, size: 40),
-        //   selectedItemColor: Colors.amberAccent,
-        //   selectedLabelStyle: TextStyle(fontWeight: FontWeight.bold),
-        //   items: const <BottomNavigationBarItem>[
-        //     BottomNavigationBarItem(
-        //       icon: Icon(Icons.home),
-        //       label: 'Home',
-        //     ),
-        //     BottomNavigationBarItem(
-        //       icon: Icon(Icons.music_note),
-        //       label: 'Sound',
-        //     ),
-        //   ],
-        //   currentIndex: _selectedIndex, //New
-        //   onTap: _onItemTapped,
-        // ),
         body: SafeArea(
           child: Center(
             child: Column(
@@ -169,15 +134,7 @@ class _HomeState extends State<Home> {
             ),
           ),
         ),
-        floatingActionButton: FloatingActionButton(
-          onPressed: () {
-            Navigator.push(context, MaterialPageRoute(builder: (context) {
-              return MusicChange();
-            }));
-          },
-          child: const Icon(Icons.music_note),
-          backgroundColor: Colors.green,
-        ));
+        floatingActionButton: LinearWidget());
   }
 
   _secondsToFormatedString(int seconds) {
@@ -254,6 +211,8 @@ class _HomeState extends State<Home> {
   }
 
   _startPomodoroCountdown() {
+    Wakelock.enable();
+
     pomodoroStatus = PomodoroStatus.runingPomodoro;
     _cancelTimer();
 
@@ -293,6 +252,8 @@ class _HomeState extends State<Home> {
   }
 
   _startShortBreak() {
+    Wakelock.enable();
+
     pomodoroStatus = PomodoroStatus.runningShortBreak;
     getSound();
     setState(() {
@@ -322,6 +283,8 @@ class _HomeState extends State<Home> {
   }
 
   _startLongBreak() {
+    Wakelock.enable();
+
     pomodoroStatus = PomodoroStatus.runningLongBreak;
     getSound();
     setState(() {
@@ -394,6 +357,7 @@ class _HomeState extends State<Home> {
   _cancelTimer() {
     if (_timer != null) {
       _timer.cancel();
+      Wakelock.disable();
     }
   }
 
@@ -401,9 +365,4 @@ class _HomeState extends State<Home> {
     player.setUrl(url_music);
     player.play();
   }
-
-// void main() {
-//   tes testo = tes();
-//   print(testo.lebar);
-// }
 }
